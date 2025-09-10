@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TeamTimeDemo.DataAccess.Data;
+using TeaTimeDemo.DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+builder.Services.AddScoped<TeaTimeDemo.DataAccess.Repository.IRepository.IUnitOfWork, TeaTimeDemo.DataAccess.Repository.UnitOfWork>();
 
 var app = builder.Build();
 
@@ -28,6 +29,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

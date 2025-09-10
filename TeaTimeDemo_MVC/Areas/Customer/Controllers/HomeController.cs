@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TeamTimeDemo.Models;
+using TeaTimeDemo.Models;
 
-namespace TeaTimeDemo_MVC.Controllers
+namespace TeaTimeDemo_MVC.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

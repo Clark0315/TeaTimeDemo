@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace TeamTimeDemo.DataAccess.Migrations
+namespace TeaTimeDemo.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class SeedCatogoryTable : Migration

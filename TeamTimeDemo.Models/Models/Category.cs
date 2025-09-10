@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace TeamTimeDemo.Models
+namespace TeaTimeDemo.Models
 {
+    /// <summary>
+    /// 類別模型，代表商品的分類資訊
+    /// </summary>
     public class Category
     {
         [Key]

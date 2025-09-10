@@ -1,20 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamTimeDemo.DataAccess.Data;
-using TeamTimeDemo.Models;
+using TeaTimeDemo.DataAccess.Repository.IRepository;
+using TeaTimeDemo.Models;
 
-namespace TeaTimeDemo_MVC.Controllers
+namespace TeaTimeDemo_MVC.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        //private readonly ApplicationDbContext _db;
+        //private readonly ICategoryRepository _categoryRepo;
+        //public CategoryController(ICategoryRepository db)
+        //{
+        //    _categoryRepo = db;
+        //}
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            List<Category> objCategoryList = _db.Categories.ToList();
+            List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
             return View(objCategoryList);
         }
 
@@ -33,8 +40,8 @@ namespace TeaTimeDemo_MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Category.Save();
                 TempData["success"] = "類別新增成功";
                 return RedirectToAction("Index");
             }
@@ -47,9 +54,7 @@ namespace TeaTimeDemo_MVC.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Categories.Find(id);
-            //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+            var categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -67,8 +72,8 @@ namespace TeaTimeDemo_MVC.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Category.Save();
                 TempData["success"] = "類別更新成功";
                 return RedirectToAction("Index");
             }
@@ -81,9 +86,7 @@ namespace TeaTimeDemo_MVC.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Categories.Find(id);
-            //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+            var categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -95,13 +98,13 @@ namespace TeaTimeDemo_MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePOST(int? id)
         {
-            var obj = _db.Categories.Find(id);
+            var obj = _unitOfWork.Category.Get(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Category.Save();
             TempData["success"] = "類別刪除成功";
             return RedirectToAction("Index");
         }
